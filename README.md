@@ -1,3 +1,3 @@
 # Cal^
-CalCtrl | cal-ctrl
+CalCtrl | cal-ctrl  
 A Terminal Based Calendar/To-Do Application Made With Python
