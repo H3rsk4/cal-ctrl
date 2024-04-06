@@ -5,8 +5,14 @@ from pathlib import Path
 
 from rich import print
 
-app = typer.Typer()
+# today typer
+from cal import today
 
+# paths
+from cal import paths
+
+app = typer.Typer()
+app.add_typer(today.app, name="today")
 
 """
 
@@ -25,8 +31,6 @@ cc <number>
 
 """
 
-task_path = Path("./tasks.txt")
-entry_path = Path("./entries.txt")
 
 
 def fileExist(path) -> bool:
@@ -162,11 +166,11 @@ def add_entry(
 
 	if entry == "task":
 		complete_entry = f"{title}@{parsed_date}@{parsed_repeat}@not completed"
-		write_to_file(task_path,complete_entry)
+		write_to_file(paths.task_path,complete_entry)
 		return
 	if entry == "entry":
 		complete_entry = f"{title}@{parsed_date}@{parsed_repeat}"
-		write_to_file(entry_path,complete_entry)
+		write_to_file(paths.entry_path,complete_entry)
 		return
 
 	print("[bold red]Invalid entry type")

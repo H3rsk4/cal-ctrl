@@ -2,7 +2,7 @@ from pathlib import Path
 import datetime
 import typer
 
-import today
+import test_today
 
 import filereading
 
@@ -20,7 +20,7 @@ main -1 -> return all entries for yesterday
 """
 
 app = typer.Typer()
-app.add_typer(today.app, name="today")
+app.add_typer(test_today.app, name="today")
 
 
 # entryList = []
