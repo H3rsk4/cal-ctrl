@@ -1,5 +1,3 @@
 # Cal^
----
-cal-ctrl | CalCtrl | cal-caret
----
+*cal-ctrl | CalCtrl | cal-caret*  
 A Terminal Based Calendar/To-Do Application Made With Python
