@@ -10,6 +10,8 @@ from cal import today
 # paths
 from cal import paths
 
+import os
+
 app = typer.Typer()
 app.add_typer(today.app, name="today")
 
@@ -39,6 +41,9 @@ def fileExist(path) -> bool:
 		print("[bold yellow] file not found", path)
 		return False
 
+@app.command()
+def pathtest():
+	print(paths.application_path)
 
 # Example for day repeat logic
 @app.command()
