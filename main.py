@@ -187,10 +187,12 @@ def add_entry(
 	if entry == "task":
 		complete_entry = f"{title}@{parsed_date}@{parsed_repeat}@not completed"
 		write_to_file(paths.task_path,complete_entry)
+		print(f"'{title}' added to [deep_sky_blue1]task[/deep_sky_blue1] list")
 		return
 	if entry == "entry":
 		complete_entry = f"{title}@{parsed_date}@{parsed_repeat}"
 		write_to_file(paths.entry_path,complete_entry)
+		print(f"'{title}' added to [yellow]entry[/yellow] list")
 		return
 
 	print("[bold red]Invalid entry type")

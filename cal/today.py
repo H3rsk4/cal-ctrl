@@ -3,6 +3,9 @@ import typer
 import datetime
 
 from rich import print
+from rich.console import Console
+from rich.table import Table
+
 from . import paths
 
 app = typer.Typer()
@@ -106,7 +109,18 @@ def write_today():
 		f.write(f"{entry}\n")
 	f.close()
 
-def read_today():
+def is_completed(task_data):
+	if task_data[-1] == today_date.strftime("%d-%m-%Y"):
+		return True
+	else:
+		return False
+
+def read_today(title:str="[bold yellow]What's for today?"):
+	table = Table(title=title)
+	table.add_column("",no_wrap=True)
+	table.add_column("title")
+	table.add_column("started")
+
 	f_today = open(paths.today_path, "r")
 	today_lines = f_today.readlines()
 	f_task = open(paths.task_path, "r")
@@ -115,9 +129,17 @@ def read_today():
 		if i == 0:
 			continue
 		entry = int(today_lines[i].rstrip("\n"))
-		print(f"{i}.",task_lines[entry].rstrip("\n"))
+		task_data = task_lines[entry].rstrip("\n").split("@")
+		if is_completed(task_data):
+			table.add_row(f"{i}.","\uf14a " + task_data[0], task_data[1], style="light_green")
+		else:
+			table.add_row(f"{i}.","\ue640 " + task_data[0], task_data[1])
+		# print(f"{i}.",task_lines[entry].rstrip("\n"))
+		
 	f_today.close()
 	f_task.close()
+	console = Console()
+	console.print(table)
 
 # Function that invokes when no command is given
 @app.callback(invoke_without_command=True)
@@ -156,7 +178,40 @@ def complete_task(today_index: int):
 	f_task = open(paths.task_path, "w")
 	f_task.writelines(task_lines)
 	f_task.close()
+	read_today(f"[light_green]Completed: {task_data[0]}")
 
+
+@app.command("undone")
+@app.command("clear")
+@app.command("uncheck")
+@app.command("u")
+def uncheck_task(today_index: int):
+	if today_index <= 0:
+		print("[bold red]Invalid number")
+		return
+
+	# fetch todays lines
+	f_today = open(paths.today_path, "r")
+	today_lines = f_today.readlines()
+	f_today.close()
+
+	if today_index > len(today_lines):
+		print("[bold red]Invalid number")
+		return
+
+	f_task = open(paths.task_path,"r")
+	task_lines = f_task.readlines()
+	f_task.close()
+
+	task_index = int(today_lines[today_index])
+	task_data = task_lines[task_index].rstrip("\n").split("@")
+	task_data[-1] = "not completed"
+	task_lines[task_index] = f"{task_data[0]}@{task_data[1]}@{task_data[2]}@{task_data[3]}" + "\n"
+
+	f_task = open(paths.task_path, "w")
+	f_task.writelines(task_lines)
+	f_task.close()
+	read_today(f"[indian_red1]Unchecked: {task_data[0]}")
 
 if __name__ == "__main__":
     app()
