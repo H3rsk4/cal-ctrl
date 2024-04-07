@@ -1,7 +1,6 @@
 from typing import Annotated
 import typer
 import datetime
-from pathlib import Path
 
 from rich import print
 
@@ -40,6 +39,8 @@ def fileExist(path) -> bool:
 		print("[bold yellow] file not found", path)
 		return False
 
+
+# Example for day repeat logic
 @app.command()
 def p():
 	# a = datetime.date(2024,4,10)
@@ -72,6 +73,25 @@ def p():
 			print(today.strftime("%d-%m-%Y") + ": no")
 		today = today + datetime.timedelta(days=1)
 	
+
+# Example for month repeat logic
+@app.command()
+def m():
+	today = datetime.date.today()
+	startdate = datetime.date(2024,5,5)
+	repeat = 12
+	# x = today.month - startdate.month
+	# print(x)
+	for i in range(365 * 2):
+		x = today.month - startdate.month
+		if x % repeat == 0:
+			if today.day == startdate.day:
+				print(today.strftime("%d-%m-%Y") + ": [green]Yes")
+			else:
+				print(today.strftime("%d-%m-%Y") + ": [red]no")
+		else:
+			print(today.strftime("%d-%m-%Y") + ": [red]no")
+		today = today + datetime.timedelta(days=1)
 
 # name: Annotated[str, typer.Argument(default_factory=get_name)]
 # def main(user_name: Annotated[str, typer.Option("--name")]):
