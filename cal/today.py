@@ -130,9 +130,33 @@ def main(ctx: typer.Context):
 @app.command("done")
 @app.command("complete")
 @app.command("c")
-def complete_task(index: int):
-	
-	pass
+def complete_task(today_index: int):
+	if today_index <= 0:
+		print("[bold red]Invalid number")
+		return
+
+	# fetch todays lines
+	f_today = open(paths.today_path, "r")
+	today_lines = f_today.readlines()
+	f_today.close()
+
+	if today_index > len(today_lines):
+		print("[bold red]Invalid number")
+		return
+
+	f_task = open(paths.task_path,"r")
+	task_lines = f_task.readlines()
+	f_task.close()
+
+	task_index = int(today_lines[today_index])
+	task_data = task_lines[task_index].rstrip("\n").split("@")
+	task_data[-1] = today_date.strftime("%d-%m-%Y")
+	task_lines[task_index] = f"{task_data[0]}@{task_data[1]}@{task_data[2]}@{task_data[3]}" + "\n"
+
+	f_task = open(paths.task_path, "w")
+	f_task.writelines(task_lines)
+	f_task.close()
+
 
 if __name__ == "__main__":
     app()
